@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename resource &apos;test/src/main/resources/templates/form_erros.html&apos; to &apos;form_errors.html&apos;" description="Rename resource &apos;form_erros.html&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="src/main/resources/templates/form_erros.html" name="form_errors.html" stamp="1738582906449" updateReferences="true"/>
+</session>
