@@ -12,6 +12,4 @@ public class helloController {
 	public String hello() {
 		return "Hello! spring boot 안녕 바이바이";
 	}
-	
-	
 }

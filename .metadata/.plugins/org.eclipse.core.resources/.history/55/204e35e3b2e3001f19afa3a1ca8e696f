@@ -1,0 +1,73 @@
+<html layout:decorate="~{layout}">
+	<div layout:fragment="content" class="container">
+		<div class="row">
+			<div class="col-12">
+				<h2 class="border-bottom py-3">[[${question.subject}]]</h2>
+				<html layout:decorate="~{layout}">
+					<div layout:fragment="content" class="container">
+						<div class="row">
+							<div class="col-12">
+								<h2 class="border-bottom py-3">[[${question.subject}]]</h2>
+								<div class="card">
+								  <div class="card-body">
+								    [[${question.content}]]					
+									<span class="float-right badge badge-warning p-2">[[${#temporals.format(question.createDate)}]]</span>				
+								  </div>
+								</div>
+								<h4 class="my-3">[[${#lists.size(question.answerList)}]]개의 답변이 있습니다.</h4>
+								<div class="card my-2" th:each="answer : ${question.answerList}">
+								  <div class="card-body">
+								    [[${answer.content}]]
+									<span class="badge badge-info p-2 float-right">[[${#temporals.format(answer.createDate)}]]</span>
+								  </div>
+								</div>
+							</div>
+						</div>
+						
+						<div class="row">
+							<div class="col-12">
+								<form th:action="@{|/answer/create/${question.id}|}" method="post" th:object="${answerForm}">
+									<div class="form-group">
+									    <label for="exampleFormControlTextarea1">Example textarea</label>
+										
+										<div th:replace="~{form_errors :: formErrorsFragment}"></div>
+										
+									    <textarea th:field="*{content}" class="form-control" id="exampleFormControlTextarea1" rows="3" ></textarea>
+									</div>
+									<input type="submit" value="답변 등록"/ class="btn btn-info">  
+								</form>
+							</div>
+						</div>
+					</div>
+				</html>		<div class="card">
+				  <div class="card-body">
+				    [[${question.content}]]					
+					<span class="float-right badge badge-warning p-2">[[${#temporals.format(question.createDate)}]]</span>				
+				  </div>
+				</div>
+				<h4 class="my-3">[[${#lists.size(question.answerList)}]]개의 답변이 있습니다.</h4>
+				<div class="card my-2" th:each="answer : ${question.answerList}">
+				  <div class="card-body">
+				    [[${answer.content}]]
+					<span class="badge badge-info p-2 float-right">[[${#temporals.format(answer.createDate)}]]</span>
+				  </div>
+				</div>
+			</div>
+		</div>
+		
+		<div class="row">
+			<div class="col-12">
+				<form th:action="@{|/answer/create/${question.id}|}" method="post" th:object="${answerForm}">
+					<div class="form-group">
+					    <label for="exampleFormControlTextarea1">Example textarea</label>
+						
+						<div th:replace="~{form_errors :: formErrorsFragment}"></div>
+						
+					    <textarea th:field="*{content}" class="form-control" id="exampleFormControlTextarea1" rows="3" ></textarea>
+					</div>
+					<input type="submit" value="답변 등록"/ class="btn btn-info">  
+				</form>
+			</div>
+		</div>
+	</div>
+</html>
