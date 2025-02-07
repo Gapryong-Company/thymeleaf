@@ -63,4 +63,14 @@ public class QuestionService {
 	public void delete(Question question) {
 		 this.questionRepository.delete(question);
 	}
+	
+	public void setSiteUser(Question question, SiteUser user) {
+		question.getVoter().add(user);
+		this.questionRepository.save(question);
+		
+	}
+	public void delSiteUser(Question question, SiteUser user) {
+		question.getVoter().remove(user);
+		this.questionRepository.save(question);
+	}
 }

@@ -3,6 +3,7 @@ package com.example.demo.user;
 
 
 import java.util.Optional;
+import java.util.Set;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -36,4 +37,8 @@ public class UserService {
 			throw new RuntimeException();
 		}
 	}
+	
+	 public boolean isUserInSet(Set<SiteUser> userSet, SiteUser user) {
+	        return userSet.contains(user);
+	    }
 }
