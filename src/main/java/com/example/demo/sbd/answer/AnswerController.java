@@ -39,8 +39,8 @@ public class AnswerController {
 			model.addAttribute("question", question);
 			return "question_detail";
 		}
-		this.answerService.create(answerForm.getContent(), question, siteUser);
-		return String.format("redirect:/question/detail/%s",id);
+		Answer answer = this.answerService.create(answerForm.getContent(), question, siteUser);
+		return String.format("redirect:/question/detail/%s#answer_%s",answer.getQuestion().getId(), answer.getId());
 	}
 	
 	@PreAuthorize("isAuthenticated()")
@@ -67,7 +67,7 @@ public class AnswerController {
 		}
 		this.answerService.modify(answer, answerForm.getContent());
 		
-		return String.format("redirect:/question/detail/%s", answer.getQuestion().getId());
+		return String.format("redirect:/question/detail/%s#answer_%s", answer.getQuestion().getId(), answer.getId());
 	}
 	
 	@PreAuthorize("isAuthenticated()")
@@ -79,6 +79,22 @@ public class AnswerController {
 		}
 		this.answerService.delete(answer);
 		return String.format("redirect:/question/detail/%s", id);
+	}
+	
+	@PreAuthorize("isAuthenticated()")
+	@GetMapping("/vote/{id}")
+	public String answerLike(Principal principal, @PathVariable("id") Integer id) {
+		Answer answer = this.answerService.getAnswer(id);
+		SiteUser user = this.userService.getUser(principal.getName());
+		if(this.userService.isUserInSet(answer.getVoter(), user)) {
+			this.answerService.delSiteUser(answer, user);
+		}else {
+			this.answerService.setSiteUser(answer, user);
+		}
+
+		
+		return String.format("redirect:/question/detail/%s#answer_%s", answer.getQuestion().getId(), answer.getId());
+		
 	}
 	
 }

@@ -17,7 +17,7 @@ import lombok.RequiredArgsConstructor;
 public class AnswerService {
 	private final AnswerRepository answerRepository;
 	
-	public void create(String content, Question question, SiteUser author) {
+	public Answer create(String content, Question question, SiteUser author) {
 		Answer answer = new Answer();
 		answer.setContent(content);
 		answer.setCreateDate(LocalDateTime.now());
@@ -26,6 +26,7 @@ public class AnswerService {
 		answer.setModifyDate(LocalDateTime.now());
 		
 		this.answerRepository.save(answer);
+		return answer;
 	}
 	//답변 수정 전에 답변 조회 먼저
 	public Answer getAnswer(Integer id) {
@@ -44,5 +45,15 @@ public class AnswerService {
 	
 	public void delete(Answer answer) {
 		 this.answerRepository.delete(answer);
+	}
+	
+	public void setSiteUser(Answer answer, SiteUser user) {
+		answer.getVoter().add(user);
+		this.answerRepository.save(answer);
+		
+	}
+	public void delSiteUser(Answer answer, SiteUser user) {
+		answer.getVoter().remove(user);
+		this.answerRepository.save(answer);
 	}
 }

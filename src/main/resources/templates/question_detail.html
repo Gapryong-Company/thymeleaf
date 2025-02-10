@@ -17,40 +17,48 @@
 			<div class="card">
 				<div class="card-body">
 					[[${question.content}]]
-					<span class="float-right badge badge-black p-2 d-flex">[[${question.author.getUsername()}]]	
+					<span class="float-right badge badge-black p-2 d-flex">[[${question.author.getUsername()}]]
 						<a th:href="@{|/question/vote/${question.id}|}" class="badge badge-danger ml-2 d-block p-2">좋아요
 							<span class="badge badge-light">[[${#lists.size(question.voter)}]]</span>
-							  <span class="sr-only">unread messages</span>
+							<span class="sr-only">unread messages</span>
 						</a>
 					</span>
-					
+
 					<hr>
 					<span class="float-right badge badge-warning p-2">작성일: [[${#temporals.format(question.createDate,
 						'yyyy-MM-dd')}]]</span>
 
 
-					<div th:if="question.modigyDate != null" >
-						<span class="float-right badge badge-warning p-2 mr-2">수정일: [[${#temporals.format(question.modifyDate,
+					<div th:if="question.modigyDate != null">
+						<span class="float-right badge badge-warning p-2 mr-2">수정일:
+							[[${#temporals.format(question.modifyDate,
 							'yyyy-MM-dd')}]]</span>
 					</div>
 
-					
+
 				</div>
 			</div>
 			<h4 class="my-3">[[${#lists.size(question.answerList)}]]개의 답변이 있습니다.</h4>
 			<div class="card my-2" th:each="answer : ${question.answerList}">
+				<a th:id="|answer_${answer.id}|"></a>
 				<div class="card-body">
 					[[${answer.content}]]
-					<span class="float-right badge  badge-black p-2">[[${answer.author.getUsername()}]]</span>
+					<span class="float-right badge  badge-black p-2 d-flex">[[${answer.author.getUsername()}]]
+						<a th:href="@{|/answer/vote/${answer.id}|}" class="badge badge-danger ml-2 d-block p-2">좋아요
+							<span class="badge badge-light">[[${#lists.size(answer.voter)}]]</span>
+							<span class="sr-only">unread messages</span>
+						</a>
+					</span>
 					<hr>
 					<span class="badge badge-info p-2 float-right">작성일: [[${#temporals.format(answer.createDate,
 						'yyyy-MM-dd')}]]</span>
-				
-						<div th:if="question.modigyDate != null">
-					<span class="badge badge-info p-2 float-right mr-2">수정일: [[${#temporals.format(answer.modifyDate,
-						'yyyy-MM-dd')}]]</span>
-						</div>
-					
+
+					<div th:if="question.modigyDate != null">
+						<span class="badge badge-info p-2 float-right mr-2">수정일:
+							[[${#temporals.format(answer.modifyDate,
+							'yyyy-MM-dd')}]]</span>
+					</div>
+
 
 				</div>
 				<div class="row">
@@ -97,15 +105,15 @@
 			}
 		})
 	})
-	
+
 	const recommend_elements = document.getElementsByClassName("recommend");
-		Array.from(recommend_elements).forEach(function (element) {
-			element.addEventListener("click", function () {
-				if (confirm("정말로 좋아요?")) {
-					location.href = this.dataset.uri;
-				}
-			})
+	Array.from(recommend_elements).forEach(function (element) {
+		element.addEventListener("click", function () {
+			if (confirm("정말로 좋아요?")) {
+				location.href = this.dataset.uri;
+			}
 		})
+	})
 </script>
 
 </html>

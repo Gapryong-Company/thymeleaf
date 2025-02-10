@@ -1,11 +1,31 @@
 <html layout:decorate="~{layout}">
-	<div layout:fragment="content" class="container my-5">
+<div layout:fragment="content" class="container my-5">
+	<div class="row">
+		<div class="col-12 text-center">
+			<h1 class="py-5 my-2">질문 게시판</h1>
+		</div>
+		</div>
 		<div class="row">
-			<div class="col-12 text-center">
-				<h1 class="py-5 my-2">질문 게시판</h1>
+			<div class="col-8">
+				<a th:href="@{/question/create}" class="btn btn-dark">질문 등록하기</a>
 			</div>
-			<div class="col-12 my-2">
-				<table class="table table-striped">
+			
+			<div class="col-4">
+					<div class="input-group">
+						<input type="text" id="search_kw" class="form-control w-50" th:value="${kw}" />
+						<div class="input-group-append">
+							<button class="btn btn-info" id="btn_search">찾기</button>
+						</div>
+						
+					</div>
+
+				</div>
+		</div>
+	
+
+
+		<div class="col-12 my-2">
+			<table class="table table-striped">
 				<thead>
 					<tr>
 						<th>번호</th>
@@ -13,43 +33,62 @@
 						<th>글쓴이</th>
 						<th>작성일시</th>
 					</tr>
-				  </thead>
+				</thead>
 				<tbody>
 					<tr th:each="question, loop : ${paging}">
 						<td>[[${paging.getTotalElements - (paging.number * paging.size) - loop.index}]]</td>
 						<td>
 							<a th:href="@{|/question/detail/${question.id}|}">[[${question.subject}]]</a>
-							<span 
-							th:if="${#lists.size(question.answerList) > 0}"
-							class="badge badge-pill badge-info">[[${#lists.size(question.answerList)}]]</span>
+							<span th:if="${#lists.size(question.answerList) > 0}"
+								class="badge badge-pill badge-info">[[${#lists.size(question.answerList)}]]</span>
 						</td>
 						<td><span th:if="${question.author != null}">[[${question.author.username}]]</span></td>
 						<td th:text="${#temporals.format(question.createDate,'yyyy년 MM월 dd일 HH시 mm분')}"></td>
 					</tr>
 				</tbody>
-				</table>
-				
-				<!--페이징 처리 시작-->
-				<nav aria-label="Page navigation example" class="border" th:if="${!paging.isEmpty()}">
-				  <ul class="pagination justify-content-center">
-				    <li class="page-item" th:classappend="${!paging.hasPrevious} ? 'disabled'">
-						<a class="page-link" th:href="@{|?page=${paging.number-1}|}" >이전</a>
+			</table>
+
+			<!--페이징 처리 시작-->
+			<nav aria-label="Page navigation example" class="border" th:if="${!paging.isEmpty()}">
+				<ul class="pagination justify-content-center">
+					<li class="page-item" th:classappend="${!paging.hasPrevious} ? 'disabled'">
+						<a class="page-link" href="javascript:void(0)" th:data-page="${paging.number-1}">이전</a>
 					</li>
-					
-				    <li th:if="${page >= paging.number-5 and page <= paging.number+5}" 
-					class="page-item"
-					th:each="page : ${#numbers.sequence(0,paging.totalPages-1)}" th:classappend="${page == paging.number} ? 'active'" 
-					>
-						<a class="page-link" th:href="@{|?page=${page}|}">[[${page}]]</a>
+
+					<li th:if="${page >= paging.number-5 and page <= paging.number+5}" class="page-item"
+						th:each="page : ${#numbers.sequence(0,paging.totalPages-1)}"
+						th:classappend="${page == paging.number} ? 'active'">
+						<a class="page-link" href="javascript:void(0)" th:data-page="${page}">[[${page}]]</a>
 					</li>
-				    
-				    <li class="page-item" th:classappend="${!paging.hasNext} ? ' disabled'"><a class="page-link" th:href="@{|?page=${paging.number+1}|}">다음</a></li>
-				  </ul>
-				</nav>
-				
-				
-				<a th:href="@{/question/create}" class="btn btn-dark">질문 등록하기</a>
-			</div>
+
+					<li class="page-item" th:classappend="${!paging.hasNext} ? ' disabled'"><a class="page-link"
+							href="javascript:void(0)" th:data-page="${paging.number+1}">다음</a></li>
+				</ul>
+			</nav>
+			<form th:action="@{/question/list}" method="get" id="searchForm">
+				<input type="text" id="kw" name="kw" th:value="${kw}"/>
+				<input type="hidden" id="page" th:value="${paging.number}"/>
+			</form>
+
 		</div>
-	</div>
+
+</div>
+<script layout:fragment="script">
+	
+	const page_elements = document.getElementsByClassName("page-link");
+	Array.from(page_elements).forEach(function(element){
+		element.addEventListener("click",function(){
+			document.getElementById("page").vlaue = this.dataset.page;
+			document.getElementById("searchForm").submit();
+		})
+	})
+	
+	const btn_search = document.getElementById("btn_search");
+	btn_search.addEventListener("click",function(){
+		document.getElementById("kw").value = 
+		document.getElementById("search_kw").value;
+		document.getElementById("page").value = 0;
+		document.getElementById("searchForm").submit();
+	})
+</script>
 </html>
